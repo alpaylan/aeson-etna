@@ -1,0 +1,46 @@
+name = "text-iso8601"
+description = "ISO 8601 date/time text parsers (sub-package of haskell/aeson). Bug fixes mined from upstream history; modern HEAD is the base, each patch reverse-applies a fix to install the original bug. The `text-iso8601` sub-package is the test target."
+language = "haskell"
+strategies = ["quickcheck", "hedgehog", "falsify", "smallcheck"]
+crate = "text-iso8601"
+base_commit = "cd59793ca2405353ecee65f25b18ad7610104914"
+
+# ---------------------------------------------------------------------------
+# Variant: parse_qoy_lowercase_only_f625f493_1
+# ---------------------------------------------------------------------------
+# Historical inspiration: aeson commit f625f493 (2021-01-04) "Fix bug in
+# FromJSON QuarterOfYear instance" — the buggy version had a typo
+# (`"e4 "` instead of `"q4"`) that rejected valid Q4 inputs. The aeson
+# 2.x refactor moved QuarterOfYear parsing into text-iso8601's
+# `parseQuarterOfYear_`, which now accepts both `Qn` and `qn`. We
+# inject a different-but-related bug: drop the `'Q' == c ||` clause so
+# only lowercase forms are accepted. This produces the same
+# user-visible failure mode as the original (uppercase `Q4` rejected)
+# in the modern code structure.
+[[tasks]]
+mutations = ["parse_qoy_lowercase_only_f625f493_1"]
+
+[tasks.source]
+repo = "https://github.com/haskell/aeson"
+commits = ["f625f493ba6ee1356f00e32baa2aa2ed772d858d"]
+commit_subjects = ["Fix bug in FromJSON QuarterOfYear instance"]
+origin = "internal"
+summary = "parseQuarterOfYear_ accepts both 'Q' and 'q' as the prefix character. The original aeson bug typo'd 'q4' as 'e4 ' rejecting all Q4 inputs; the modern text-iso8601 implementation uses a single guard `'Q' == c || 'q' == c`. The injected bug drops the `'Q' == c ||` clause so uppercase variants are rejected."
+
+[tasks.injection]
+kind = "patch"
+files = ["text-iso8601/src/Data/Time/FromText.hs"]
+locations = [{ file = "text-iso8601/src/Data/Time/FromText.hs", line = 365, symbol = "parseQuarterOfYear_" }]
+patch = "patches/parse_qoy_lowercase_only_f625f493_1.patch"
+
+[tasks.bug]
+short_name = "parseQuarterOfYear_lowercase_only"
+invariant = "parseQuarterOfYear accepts both `Qn` and `qn` for n in {1,2,3,4}, returning the corresponding QuarterOfYear value."
+how_triggered = "Reverse-applying the patch removes the `'Q' == c ||` clause from parseQuarterOfYear_'s guard. parseQuarterOfYear \"Q1\" then returns Left \"Unexpected character ...\" instead of Right Q1."
+
+[[tasks.tasks]]
+property = "QuarterOfYearCaseInsensitive"
+witnesses = [
+  { test_fn = "witness_quarter_of_year_case_insensitive_case_upper_q4", note = "parseQuarterOfYear \"Q4\" must equal Right Q4" },
+  { test_fn = "witness_quarter_of_year_case_insensitive_case_upper_q1", note = "parseQuarterOfYear \"Q1\" must equal Right Q1" },
+]

@@ -25,3 +25,9 @@ benchmarks/AesonEncode
 tests/qc
 
 cabal.sandbox.config
+/.hegel/
+/.marauders/
+/etna.log
+/progress.jsonl
+/dist-newstyle/
+/etna/dist-newstyle/
