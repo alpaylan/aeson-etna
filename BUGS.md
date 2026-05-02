@@ -1,6 +1,6 @@
-# text-iso8601 — Injected Bugs
+# aeson — Injected Bugs
 
-ISO 8601 date/time text parsers (sub-package of haskell/aeson). Bug fixes mined from upstream history; modern HEAD is the base, each patch reverse-applies a fix to install the original bug. The `text-iso8601` sub-package is the test target.
+Fast JSON parsing and encoding (haskell/aeson). This workload narrows cabal.project to the text-iso8601 sub-package — that's where the QuarterOfYear bug lives. Bug fixes mined from upstream history; modern HEAD is the base, each patch reverse-applies a fix to install the original bug.
 
 Total mutations: 1
 

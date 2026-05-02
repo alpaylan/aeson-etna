@@ -1,8 +1,8 @@
-name = "text-iso8601"
-description = "ISO 8601 date/time text parsers (sub-package of haskell/aeson). Bug fixes mined from upstream history; modern HEAD is the base, each patch reverse-applies a fix to install the original bug. The `text-iso8601` sub-package is the test target."
+name = "aeson"
+description = "Fast JSON parsing and encoding (haskell/aeson). This workload narrows cabal.project to the text-iso8601 sub-package — that's where the QuarterOfYear bug lives. Bug fixes mined from upstream history; modern HEAD is the base, each patch reverse-applies a fix to install the original bug."
 language = "haskell"
 strategies = ["quickcheck", "hedgehog", "falsify", "smallcheck"]
-crate = "text-iso8601"
+crate = "aeson"
 base_commit = "cd59793ca2405353ecee65f25b18ad7610104914"
 
 # ---------------------------------------------------------------------------
