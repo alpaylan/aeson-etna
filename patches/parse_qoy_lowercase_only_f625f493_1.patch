@@ -1,13 +1,13 @@
-diff --git b/text-iso8601/src/Data/Time/FromText.hs a/text-iso8601/src/Data/Time/FromText.hs
-index 68c4910..c51897d 100644
---- b/text-iso8601/src/Data/Time/FromText.hs
-+++ a/text-iso8601/src/Data/Time/FromText.hs
+diff --git a/text-iso8601/src/Data/Time/FromText.hs b/text-iso8601/src/Data/Time/FromText.hs
+index c51897d..68c4910 100644
+--- a/text-iso8601/src/Data/Time/FromText.hs
++++ b/text-iso8601/src/Data/Time/FromText.hs
 @@ -362,7 +362,7 @@ parseQuarterOfYear_
      -> Either String r
  parseQuarterOfYear_ kont =
      unconsAscii (unexpectedEOF "QuarterOfYear") $ \c -> if
--        | 'q' == c -> unconsAscii (unexpectedEOF "Quarter digit") $ \c' -> case c' of
-+        | 'Q' == c || 'q' == c -> unconsAscii (unexpectedEOF "Quarter digit") $ \c' -> case c' of
+-        | 'Q' == c || 'q' == c -> unconsAscii (unexpectedEOF "Quarter digit") $ \c' -> case c' of
++        | 'q' == c -> unconsAscii (unexpectedEOF "Quarter digit") $ \c' -> case c' of
              '1' -> inline kont Q1
              '2' -> inline kont Q2
              '3' -> inline kont Q3
